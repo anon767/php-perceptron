@@ -16,6 +16,7 @@ class Layer
     protected $nodes = [];
     protected $weights = [];
     protected $errorSignals = [];
+    protected $nodesPure = [];
     /**
      * @return mixed
      */
@@ -23,7 +24,10 @@ class Layer
     {
         return $this->nodes;
     }
-
+    public function getNodesPure()
+    {
+        return $this->nodesPure;
+    }
     public function setError($i,$val){
         if(!is_numeric($val))
             throw new InvalidArgumentException();
@@ -61,7 +65,11 @@ class Layer
             throw new InvalidArgumentException();
         $this->nodes[$i] = $val;
     }
-
+    public function setNodePure($i,$val){
+        if(!is_numeric($val))
+            throw new InvalidArgumentException();
+        $this->nodesPure[$i] = $val;
+    }
     public function addNode($node)
     {
         array_push($this->nodes, $node);

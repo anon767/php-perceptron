@@ -10,7 +10,7 @@ class Network
     protected $layers = [];
     protected $weights = [];
     protected $activationFunction;
-    protected $eta = 0.01;
+    protected $eta = 0.5;
 
     /**
      * Network constructor.
@@ -90,8 +90,10 @@ class Network
         if (!is_array($inputVector))
             throw new \InvalidArgumentException();
 
-        foreach ($inputVector as $key => $node)
+        foreach ($inputVector as $key => $node) {
             $this->layers[0]->setNode($key, $node);
+            $this->layers[0]->setNodePure($key, $node);
+        }
 
         for ($i = 1; $i < count($this->layers); $i++) {
             foreach ($this->layers[$i]->getNodes() as $nodeID => $node) {
@@ -100,6 +102,8 @@ class Network
                     $sum += $prevNode * $this->layers[$i - 1]->getWeights()[$prevNodeID][$nodeID];
                 }
                 $this->layers[$i]->setNode($nodeID, $this->activationFunction->activate($sum));
+                $this->layers[$i]->setNodePure($nodeID, $sum);
+
             }
         }
         return $this->layers[count($this->layers) - 1]->getNodes();
@@ -117,8 +121,9 @@ class Network
 
         for ($i = 0; $i < count($output); $i++) {
             //added: multiplying derivative of current node to difference
-            $this->layers[count($this->layers) - 1]->setError($i,
-                $this->activationFunction->derivativeActivate($output[$i]) * ($desiredOutput[$i] - $output[$i]));
+            /* $this->layers[count($this->layers) - 1]->setError($i,
+                 $this->activationFunction->derivativeActivate($output[$i]) * ($desiredOutput[$i] - $output[$i]));*/
+            $this->layers[count($this->layers) - 1]->setError($i, ($desiredOutput[$i] - $output[$i]));
         }
 
         for ($i = count($this->layers) - 2; $i >= 0; $i--) {
@@ -128,7 +133,7 @@ class Network
                     $sum += $this->layers[$i + 1]->getError($predNodeID) * $this->layers[$i]->getWeights()[$nodeID][$predNodeID];
                 }
                 //added: multiplying derivative of current node to difference
-                $this->layers[$i]->setError($nodeID, $this->activationFunction->derivativeActivate($node) * $sum);
+                $this->layers[$i]->setError($nodeID, $sum);
             }
         }
 
@@ -137,9 +142,12 @@ class Network
             foreach ($this->layers[$i]->getNodes() as $nodeID => $node) {
                 foreach ($this->layers[$i - 1]->getNodes() as $prevNodeID => $prevNode) {
                     $tempWeights[$prevNodeID][$nodeID] = $this->layers[$i - 1]->getWeights()[$prevNodeID][$nodeID] +
-                        $this->eta * $this->layers[$i]->getError($nodeID) * $prevNode;
+                        $this->eta * $this->layers[$i]->getError($nodeID) * $this->activationFunction->derivativeActivate($this->layers[$i]->getNodesPure()[$nodeID]) * $prevNode;
+                    var_dump($this->layers[$i]->getError($nodeID));
                 }
             }
+
+            exit;
             $this->layers[$i - 1]->setWeights($tempWeights);
         }
 

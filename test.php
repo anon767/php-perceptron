@@ -21,7 +21,7 @@ do {
         $n->train([$params[0], $params[1], $params[2], $params[3]], [$params[4], $params[5], $params[6]]);
     }
     $j++;
-} while ($j < 5000);
+} while ($j < 2);
 
 echo "<hr>";
 //5.1,3.8,1.5,0.3,Iris-setosa
