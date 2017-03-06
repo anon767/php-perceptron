@@ -10,7 +10,7 @@ class Network
     protected $layers = [];
     protected $weights = [];
     protected $activationFunction;
-    protected $eta = 0.5;
+    protected $eta = 0.01;
 
     /**
      * Network constructor.
@@ -49,7 +49,7 @@ class Network
      */
     protected function getRandomWeight()
     {
-        return ((mt_rand(0, 1000) / 1000) - 0.5) / 2;
+        return 1;
     }
 
     /**
@@ -60,10 +60,7 @@ class Network
     public function train($input, $output)
     {
         $actualOutput = $this->calculate($input);
-        while (abs($actualOutput[0] - $output[0]) > 0.001 || abs($actualOutput[1] - $output[1]) > 0.001 || abs($actualOutput[2] - $output[2]) > 0.001) {
-            $actualOutput = $this->calculate($input);
-            $this->backPropagate($actualOutput, $output);
-        }
+        $this->backPropagate($actualOutput, $output);
 
     }
 
