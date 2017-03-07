@@ -142,7 +142,7 @@ class Network
             foreach ($this->layers[$i]->getNodes() as $nodeID => $node) {
                 foreach ($this->layers[$i - 1]->getNodes() as $prevNodeID => $prevNode) {
                     $tempWeights[$prevNodeID][$nodeID] = $this->layers[$i - 1]->getWeights()[$prevNodeID][$nodeID] +
-                        $this->eta * $this->layers[$i]->getError($nodeID) * $this->activationFunction->derivativeActivate($this->layers[$i]->getNodesPure()[$nodeID]) * $prevNode;
+                        $this->eta * $this->layers[$i]->getError($nodeID) * $this->activationFunction->derivativeActivate($node);
                     var_dump($this->layers[$i]->getError($nodeID));
                 }
             }
