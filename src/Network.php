@@ -153,7 +153,7 @@ class Network
             }
             $this->layers[$i - 1]->setWeights($tempWeights);
         }
-        $this->eta *= 0.999999;
+        $this->eta *= 0.9999999;
     }
 
     /**

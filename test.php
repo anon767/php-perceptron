@@ -19,7 +19,7 @@ for ($i = 0; $i < count($testCases); $i++) {
     $trainingset[] = [$params[0], $params[1], $params[2], $params[3], $params[4], $params[5], trim($params[6])];
 }
 
-$n->trainData($trainingset, 5000);
+$n->trainData($trainingset, 10000);
 /*$j = 0;
 do {
     shuffle($testCases);
