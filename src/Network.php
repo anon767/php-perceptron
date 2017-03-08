@@ -11,6 +11,8 @@ class Network
     protected $weights = [];
     protected $activationFunction;
     protected $eta = 0.001;
+    protected $etarate = 20;
+    protected $etacounter = 0;
 
     /**
      * Network constructor.
@@ -59,13 +61,14 @@ class Network
         for ($i = 0; $i < $epochs; $i++) {
             $sum_error = 0;
             $eta = $this->eta;
-            shuffle($train);
+           // shuffle($train);
             for ($j = 0; $j < count($train); $j++) {
                 $actualOutput = $this->calculate([$train[$j][0], $train[$j][1], $train[$j][2], $train[$j][3]]);
                 $sum_error += pow($actualOutput[0] - $train[$j][4], 2) + pow($actualOutput[1] - $train[$j][5], 2) + pow($actualOutput[2] - $train[$j][6], 2);
                 $this->backPropagate($actualOutput, [$train[$j][4], $train[$j][5], $train[$j][6]]);
             }
             printf("epoch=%d lrate=%.5f error=%.3f\r\n", $i, $eta, $sum_error);
+
         }
 
     }
@@ -115,6 +118,7 @@ class Network
         return $this->layers[count($this->layers) - 1]->getNodes();
     }
 
+
     /**
      * @param $output
      * @param $desiredOutput
@@ -153,7 +157,12 @@ class Network
             }
             $this->layers[$i - 1]->setWeights($tempWeights);
         }
-        $this->eta *= 0.9999999;
+        if ($this->etacounter === 20) {
+            $this->etacounter = 0;
+            $this->eta *= 0.9999;
+        } else {
+            $this->etacounter++;
+        }
     }
 
     /**

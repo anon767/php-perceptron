@@ -4,8 +4,7 @@ use NeuralNetwork\Network;
 use NeuralNetwork\ActivationFunction\TanhFunction;
 
 
-
-$n = new Network([4, 4, 3], new TanhFunction());
+$n = new Network([4, 10, 10,10, 3], new TanhFunction());
 
 $fileContents = str_replace("Iris-virginica", "-1,-1,1", str_replace("Iris-versicolor", "-1,1,-1", str_replace("Iris-setosa", "1,-1,-1", file_get_contents("TestData/IRIS.txt"))));
 
@@ -16,10 +15,10 @@ $trainingset = [];
 
 for ($i = 0; $i < count($testCases); $i++) {
     $params = explode(",", $testCases[$i]);
-    $trainingset[] = [$params[0], $params[1], $params[2], $params[3], $params[4], $params[5], trim($params[6])];
+    $trainingset[] = [floatval(trim($params[0])), floatval(trim($params[1])), floatval(trim($params[2])), floatval(trim($params[3])), intval(trim($params[4])), intval(trim($params[5])), intval(trim($params[6]))];
 }
 
-$n->trainData($trainingset, 10000);
+$n->trainData($trainingset, 1040);
 /*$j = 0;
 do {
     shuffle($testCases);
