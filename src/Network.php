@@ -36,14 +36,6 @@ class Network
 
     }
 
-    /**
-     * (not used) attempt to decrease learning rate
-     * @param $val
-     */
-    public function calculateETA($val)
-    {
-        $this->eta = (exp(-$val)) / 2;
-    }
 
     /**
      * weight between [-0.25,0.25]
@@ -125,7 +117,6 @@ class Network
      */
     public function backPropagate($output, $desiredOutput)
     {
-
         if (count($output) != count($desiredOutput))
             throw new \InvalidArgumentException();
 
